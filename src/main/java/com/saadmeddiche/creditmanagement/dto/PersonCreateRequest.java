@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -13,8 +12,8 @@ public record PersonCreateRequest(
         @NotBlank @NotEmpty String firstName,
         @NotBlank @NotEmpty String lastName,
         @NotBlank @NotEmpty @Email String email,
-        @NotBlank String job,
-        @NotBlank String description,
-        @Validated @Valid List<PhoneNumber> phoneNumbers
+        @NotBlank @NotEmpty String job,
+        String description,
+        @Valid List<PhoneNumber> phoneNumbers
 ) {
 }
