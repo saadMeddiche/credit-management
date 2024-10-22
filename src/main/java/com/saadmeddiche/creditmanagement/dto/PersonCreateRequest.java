@@ -1,6 +1,7 @@
 package com.saadmeddiche.creditmanagement.dto;
 
 import com.saadmeddiche.creditmanagement.entity.embeddable.PhoneNumber;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,6 +15,6 @@ public record PersonCreateRequest(
         @NotBlank @NotEmpty @Email String email,
         @NotBlank String job,
         @NotBlank String description,
-        @Validated List<PhoneNumber> phoneNumbers
+        @Validated @Valid List<PhoneNumber> phoneNumbers
 ) {
 }
