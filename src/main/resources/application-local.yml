@@ -1,0 +1,14 @@
+# Database Configuration
+spring.datasource:
+  url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/creditmanagement}
+  username: ${DATABASE_USERNAME:postgres}
+  password: ${DATABASE_PASSWORD:1234}
+  driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
+
+# JPA Configuration
+spring.jpa:
+  hibernate.ddl-auto: ${JPA_HIBERNATE_DDL_AUTO:update}
+  show-sql: ${JPA_SHOW_SQL:true}
+  properties:
+    hibernate:
+      dialect: ${JPA_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
