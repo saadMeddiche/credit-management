@@ -30,11 +30,14 @@ public class PersonSeeder extends Seeder {
     @Override
     public void seeding() {
 
+        Date start = new Date();
         List<Person> persons = new ArrayList<>();
         for (int i = 0; i < properties.getPersonCount(); i++) {
             persons.add(buildPerson());
         }
         personRepository.saveAll(persons);
+        Date end = new Date();
+        System.out.println("PersonSeeder: " + properties.getPersonCount() + " persons have been seeded in " + (end.getTime() - start.getTime()) + " ms");
     }
 
     private Person buildPerson() {
