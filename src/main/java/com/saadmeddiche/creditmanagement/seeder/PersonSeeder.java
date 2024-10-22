@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Profile("local")
@@ -23,15 +24,20 @@ public class PersonSeeder extends Seeder {
 
     private final PersonSeederProperties properties;
 
+    private final Faker faker = new Faker();
+
+
     @Override
     public void seeding() {
+
+        List<Person> persons = new ArrayList<>();
         for (int i = 0; i < properties.getPersonCount(); i++) {
-            personRepository.save(buildPerson());
+            persons.add(buildPerson());
         }
+        personRepository.saveAll(persons);
     }
 
     private Person buildPerson() {
-        Faker faker = new Faker();
         return Person.builder()
                 .firstName(faker.name().firstName())
                 .lastName(faker.name().lastName())
@@ -51,7 +57,6 @@ public class PersonSeeder extends Seeder {
     }
 
     private PhoneNumber buildPhoneNumber() {
-        Faker faker = new Faker();
         return PhoneNumber.builder()
                 .number(faker.phoneNumber().cellPhone())
                 .countryCode(faker.phoneNumber().extension())
