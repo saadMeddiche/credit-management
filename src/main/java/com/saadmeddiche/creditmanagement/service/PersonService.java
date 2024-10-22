@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+
 @Service @Transactional
 @RequiredArgsConstructor @Validated
 public class PersonService {
@@ -23,5 +25,9 @@ public class PersonService {
         Person person = modelMapper.map(personCreateRequest , Person.class);
 
         personRepository.save(person);
+    }
+
+    public List<Person> getAllPersons() {
+        return personRepository.findAll();
     }
 }
