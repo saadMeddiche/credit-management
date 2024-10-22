@@ -14,7 +14,4 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @EntityGraph(attributePaths = {"phoneNumbers"})
     List<Person> findAll();
 
-    @Override
-    @EntityGraph(attributePaths = {"phoneNumbers"})
-    Person save(Person person);
 }
