@@ -27,6 +27,7 @@ public class PersonService {
         personRepository.save(person);
     }
 
+    @Transactional(readOnly = true)
     public List<Person> getAllPersons() {
         return personRepository.findAll();
     }
