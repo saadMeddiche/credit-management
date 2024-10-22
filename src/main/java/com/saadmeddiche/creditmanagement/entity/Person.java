@@ -1,15 +1,15 @@
-package com.saadmeddiche.creditmanagement.entities;
+package com.saadmeddiche.creditmanagement.entity;
 
-import com.saadmeddiche.creditmanagement.entities.embdebles.PhoneNumber;
+import com.saadmeddiche.creditmanagement.entity.embeddable.PhoneNumber;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.Formula;
 
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter @Setter @Builder
+@AllArgsConstructor @NoArgsConstructor
 public class Person {
 
     @Id
@@ -30,5 +30,11 @@ public class Person {
 
     @ElementCollection
     private List<PhoneNumber> phoneNumbers;
+
+    @Column(length = 50)
+    private String job;
+
+    @Column(length = 5000)
+    private String description;
 
 }
