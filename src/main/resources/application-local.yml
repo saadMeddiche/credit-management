@@ -12,3 +12,9 @@ spring.jpa:
   properties:
     hibernate:
       dialect: ${JPA_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
+
+# Seeders Configuration
+person-seeder:
+  enabled: ${PERSON_SEED_ENABLED:true}
+  person-count: ${PERSON_COUNT:20000}
+  phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:5}

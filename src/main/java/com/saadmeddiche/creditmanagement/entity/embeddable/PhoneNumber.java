@@ -3,11 +3,10 @@ package com.saadmeddiche.creditmanagement.entity.embeddable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Embeddable
-@Getter @Setter
+@Embeddable @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class PhoneNumber {
     @Column(length = 50)
     private @NotBlank String number;
