@@ -1,6 +1,6 @@
-package com.saadmeddiche.creditmanagement.repositories;
+package com.saadmeddiche.creditmanagement.repository;
 
-import com.saadmeddiche.creditmanagement.entities.Person;
+import com.saadmeddiche.creditmanagement.entity.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
