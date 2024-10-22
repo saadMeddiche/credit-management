@@ -22,7 +22,7 @@ public class Person {
     @Column(length = 50, nullable = false)
     private String lastName;
 
-    @Formula("concat(firstName, ' ', lastName)")
+    @Formula("concat(first_name, ' ', last_name)")
     private String fullName;
 
     @Column(unique = true)
