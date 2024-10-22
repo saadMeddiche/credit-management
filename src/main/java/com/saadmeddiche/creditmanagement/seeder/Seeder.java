@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 @Profile("local")
 public abstract class Seeder implements CommandLineRunner {
 
-    private final String SEED_NAME = this.getClass().getName().toLowerCase();
+    private final String SEED_NAME = this.getClass().getSimpleName().toLowerCase();
     private final Logger logger = Logger.getLogger(SEED_NAME);
 
     @Override
