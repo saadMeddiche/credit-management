@@ -1,6 +1,6 @@
 # Database Configuration
 spring.datasource:
-  url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/creditmanagement}
+  url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/creditmanagement?reWriteBatchedInserts=true}
   username: ${DATABASE_USERNAME:postgres}
   password: ${DATABASE_PASSWORD:1234}
   driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
