@@ -12,8 +12,7 @@ import java.util.List;
 @AllArgsConstructor @NoArgsConstructor
 public class Person {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_seq")
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_seq")
     private Long id;
 
     @Column(length = 50, nullable = false)
@@ -29,6 +28,7 @@ public class Person {
     private String email;
 
     @ElementCollection
+    @CollectionTable(uniqueConstraints = @UniqueConstraint(columnNames = {"number", "country_code"}))
     private List<PhoneNumber> phoneNumbers;
 
     @Column(length = 50)
@@ -36,5 +36,8 @@ public class Person {
 
     @Column(length = 5000)
     private String description;
+
+    @OneToMany(mappedBy = "person")
+    private List<Credit> credits;
 
 }
