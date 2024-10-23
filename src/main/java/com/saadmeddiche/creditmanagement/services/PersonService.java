@@ -27,6 +27,10 @@ public class PersonService {
         personRepository.save(person);
     }
 
+    public void deletePerson(Long id) {
+        personRepository.deleteById(id);
+    }
+
     @Transactional(readOnly = true)
     public List<Person> getAllPersons() {
         return personRepository.findAll();
