@@ -12,3 +12,8 @@ spring.jpa:
   properties:
     hibernate:
       dialect: ${JPA_HIBERNATE_DIALECT}
+
+# Server Error Configuration
+server.error:
+  include-stacktrace: ${INCLUDE_STACKTRACE:NEVER}
+  include-message: ${INCLUDE_MESSAGE:NEVER}

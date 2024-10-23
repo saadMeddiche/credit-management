@@ -15,6 +15,11 @@ spring.jpa:
 
 # Seeders Configuration
 person-seeder:
-  enabled: ${PERSON_SEED_ENABLED:true}
-  person-count: ${PERSON_COUNT:20000}
-  phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:5}
+  enabled: ${PERSON_SEED_ENABLED:false}
+  person-count: ${PERSON_COUNT:1000}
+  phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
+
+# Server Error Configuration
+server.error:
+  include-stacktrace: ${INCLUDE_STACKTRACE:NEVER}
+  include-message: ${INCLUDE_MESSAGE:ALWAYS}
