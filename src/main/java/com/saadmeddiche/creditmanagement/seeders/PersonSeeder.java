@@ -11,9 +11,7 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Profile("local")
 @RequiredArgsConstructor @Configuration
@@ -51,8 +49,8 @@ public class PersonSeeder extends Seeder {
                 .build();
     }
 
-    private List<PhoneNumber> generatePhoneNumbers() {
-        List<PhoneNumber> phoneNumbers = new ArrayList<>();
+    private Set<PhoneNumber> generatePhoneNumbers() {
+        Set<PhoneNumber> phoneNumbers = new HashSet<>();
         for (int i = 0; i < properties.getPhoneNumberPerPerson(); i++) {
             phoneNumbers.add(buildPhoneNumber());
         }

@@ -8,7 +8,7 @@ spring.datasource:
 # JPA Configuration
 spring.jpa:
   hibernate.ddl-auto: ${JPA_HIBERNATE_DDL_AUTO:update}
-  show-sql: ${JPA_SHOW_SQL:true}
+  show-sql: ${JPA_SHOW_SQL:false}
   properties:
     hibernate:
       dialect: ${JPA_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
@@ -16,7 +16,7 @@ spring.jpa:
 # Seeders Configuration
 person-seeder:
   enabled: ${PERSON_SEED_ENABLED:false}
-  person-count: ${PERSON_COUNT:1000}
+  person-count: ${PERSON_COUNT:100000}
   phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
 
 # Server Error Configuration

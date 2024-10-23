@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Getter @Setter @Builder
@@ -24,12 +24,12 @@ public class Person {
     @Formula("concat(first_name, ' ', last_name)")
     private String fullName;
 
-    @Column(length = 100,unique = true)
+    @Column(length = 100,unique = false)
     private String email;
 
     @ElementCollection
     @CollectionTable(uniqueConstraints = @UniqueConstraint(columnNames = {"number", "country_code"}))
-    private List<PhoneNumber> phoneNumbers;
+    private Set<PhoneNumber> phoneNumbers;
 
     @Column(length = 50)
     private String job;
@@ -38,6 +38,6 @@ public class Person {
     private String description;
 
     @OneToMany(mappedBy = "person")
-    private List<Credit> credits;
+    private Set<Credit> credits;
 
 }
