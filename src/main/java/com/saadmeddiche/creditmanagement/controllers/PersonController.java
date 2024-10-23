@@ -22,9 +22,16 @@ public class PersonController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePerson(@PathVariable Long id) {
+        personService.deletePerson(id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public ResponseEntity<List<Person>> getAllPersons() {
-        return ResponseEntity.ok(personService.getAllPersons());
+        List<Person> persons = personService.getAllPersons();
+        return ResponseEntity.ok(persons);
     }
 
 }
