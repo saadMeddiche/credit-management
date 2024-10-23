@@ -1,4 +1,4 @@
-package com.saadmeddiche.creditmanagement.property;
+package com.saadmeddiche.creditmanagement.properties;
 
 import org.springframework.context.annotation.Profile;
 

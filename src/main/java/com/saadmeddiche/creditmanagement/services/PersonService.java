@@ -1,8 +1,8 @@
-package com.saadmeddiche.creditmanagement.service;
+package com.saadmeddiche.creditmanagement.services;
 
-import com.saadmeddiche.creditmanagement.dto.PersonCreateRequest;
-import com.saadmeddiche.creditmanagement.entity.Person;
-import com.saadmeddiche.creditmanagement.repository.PersonRepository;
+import com.saadmeddiche.creditmanagement.dtos.PersonCreateRequest;
+import com.saadmeddiche.creditmanagement.entities.Person;
+import com.saadmeddiche.creditmanagement.repositories.PersonRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,6 +1,6 @@
-package com.saadmeddiche.creditmanagement.dto;
+package com.saadmeddiche.creditmanagement.dtos;
 
-import com.saadmeddiche.creditmanagement.entity.embeddable.PhoneNumber;
+import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

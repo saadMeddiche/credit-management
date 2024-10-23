@@ -1,4 +1,4 @@
-package com.saadmeddiche.creditmanagement.seeder;
+package com.saadmeddiche.creditmanagement.seeders;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;

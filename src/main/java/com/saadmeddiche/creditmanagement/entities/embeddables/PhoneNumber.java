@@ -1,4 +1,4 @@
-package com.saadmeddiche.creditmanagement.entity.embeddable;
+package com.saadmeddiche.creditmanagement.entities.embeddables;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

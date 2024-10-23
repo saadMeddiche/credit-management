@@ -1,4 +1,4 @@
-package com.saadmeddiche.creditmanagement.condition;
+package com.saadmeddiche.creditmanagement.conditions;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;

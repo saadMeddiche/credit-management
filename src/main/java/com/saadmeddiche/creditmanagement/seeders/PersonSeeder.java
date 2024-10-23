@@ -1,11 +1,11 @@
-package com.saadmeddiche.creditmanagement.seeder;
+package com.saadmeddiche.creditmanagement.seeders;
 
 import com.github.javafaker.Faker;
-import com.saadmeddiche.creditmanagement.condition.PersonSeederEnabledCondition;
-import com.saadmeddiche.creditmanagement.entity.Person;
-import com.saadmeddiche.creditmanagement.entity.embeddable.PhoneNumber;
-import com.saadmeddiche.creditmanagement.property.PersonSeederProperties;
-import com.saadmeddiche.creditmanagement.repository.PersonRepository;
+import com.saadmeddiche.creditmanagement.conditions.PersonSeederEnabledCondition;
+import com.saadmeddiche.creditmanagement.entities.Person;
+import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
+import com.saadmeddiche.creditmanagement.properties.PersonSeederProperties;
+import com.saadmeddiche.creditmanagement.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;

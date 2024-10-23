@@ -1,6 +1,6 @@
-package com.saadmeddiche.creditmanagement.entity;
+package com.saadmeddiche.creditmanagement.entities;
 
-import com.saadmeddiche.creditmanagement.entity.embeddable.PhoneNumber;
+import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Formula;

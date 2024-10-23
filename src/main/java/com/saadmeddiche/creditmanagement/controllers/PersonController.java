@@ -1,8 +1,8 @@
-package com.saadmeddiche.creditmanagement.controller;
+package com.saadmeddiche.creditmanagement.controllers;
 
-import com.saadmeddiche.creditmanagement.dto.PersonCreateRequest;
-import com.saadmeddiche.creditmanagement.entity.Person;
-import com.saadmeddiche.creditmanagement.service.PersonService;
+import com.saadmeddiche.creditmanagement.dtos.PersonCreateRequest;
+import com.saadmeddiche.creditmanagement.entities.Person;
+import com.saadmeddiche.creditmanagement.services.PersonService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
