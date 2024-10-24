@@ -1,7 +1,9 @@
 package com.saadmeddiche.creditmanagement.services;
 
 import com.saadmeddiche.creditmanagement.dtos.PersonCreateRequest;
+import com.saadmeddiche.creditmanagement.dtos.PersonUpdateRequest;
 import com.saadmeddiche.creditmanagement.entities.Person;
+import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
 import com.saadmeddiche.creditmanagement.repositories.PersonRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,21 @@ public class PersonService {
 
         personRepository.save(person);
     }
+
+    public void updatePerson(Person person , @Valid PersonUpdateRequest personUpdateRequest) {
+
+        modelMapper.map(personUpdateRequest , person);
+
+        personUpdateRequest.phoneNumberRequests().forEach(phoneNumberRequest -> {
+            if(phoneNumberRequest.add()){
+                person.getPhoneNumbers().add(modelMapper.map(phoneNumberRequest , PhoneNumber.class));
+            } else {
+                person.getPhoneNumbers().removeIf(phoneNumber -> phoneNumber.getNumber().equals(phoneNumberRequest.number()) && phoneNumber.getCountryCode().equals(phoneNumberRequest.countryCode()));
+            }
+        });
+
+    }
+
 
     public void deletePerson(Long id) {
         personRepository.deleteById(id);
