@@ -24,7 +24,7 @@ public class Person {
     @Formula("concat(first_name, ' ', last_name)")
     private String fullName;
 
-    @Column(length = 100,unique = false)
+    @Column(length = 100,unique = true)
     private String email;
 
     @ElementCollection
