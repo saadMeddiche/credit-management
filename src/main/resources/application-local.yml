@@ -11,7 +11,14 @@ spring.jpa:
   show-sql: ${JPA_SHOW_SQL:false}
   properties:
     hibernate:
+      format_sql : ${JPA_FORMAT_SQL:true}
       dialect: ${JPA_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
+
+# Logger Configuration
+logging.level.org.hibernate:
+  SQL: DEBUG
+  type.descriptor.sql.BasicBinder: TRACE
+  orm.jdbc.bind: TRACE
 
 # Seeders Configuration
 person-seeder:
