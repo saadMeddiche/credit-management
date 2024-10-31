@@ -18,6 +18,8 @@ public @interface NotExist {
 
     String fieldName();
 
+    String id() default "id"; // The name of path variable that contains the id of the record
+
     String message() default "Record already exists";
 
     Class<?>[] groups() default {};

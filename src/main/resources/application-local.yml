@@ -1,7 +1,7 @@
 # Database Configuration
 spring.datasource:
   url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/creditmanagement?reWriteBatchedInserts=true}
-  username: ${DATABASE_USERNAME:postgres}
+  username: ${DATABASE_USERNAME:user}
   password: ${DATABASE_PASSWORD:1234}
   driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
 
@@ -22,7 +22,7 @@ logging.level.org.hibernate:
 
 # Seeders Configuration
 person-seeder:
-  enabled: ${PERSON_SEED_ENABLED:false}
+  enabled: ${PERSON_SEED_ENABLED:true}
   person-count: ${PERSON_COUNT:200}
   phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
 

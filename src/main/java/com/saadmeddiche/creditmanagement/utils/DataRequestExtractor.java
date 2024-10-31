@@ -2,6 +2,7 @@ package com.saadmeddiche.creditmanagement.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerMapping;
 
@@ -19,5 +20,9 @@ public class DataRequestExtractor {
                 request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 
         return pathVariables;
+    }
+
+    public boolean isHttpMethod(HttpMethod httpMethod) {
+        return request.getMethod().equalsIgnoreCase(httpMethod.name());
     }
 }
