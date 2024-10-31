@@ -22,7 +22,7 @@ logging.level.org.hibernate:
 
 # Seeders Configuration
 person-seeder:
-  enabled: ${PERSON_SEED_ENABLED:true}
+  enabled: ${PERSON_SEED_ENABLED:false}
   person-count: ${PERSON_COUNT:200}
   phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
 

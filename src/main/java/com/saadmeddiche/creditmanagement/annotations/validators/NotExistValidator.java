@@ -55,7 +55,7 @@ public class NotExistValidator implements ConstraintValidator<NotExist,String> {
             String id = request.pathVariablesBuilder().get(nameOfPathVariableContainingId);
 
             if(id == null) { // If the id is not found in the path variables
-                throw new IllegalArgumentException("The id is required in the path variables");
+                throw new IllegalArgumentException(String.format("The path variable %s is not found", nameOfPathVariableContainingId));
             }
 
             // Add a condition to exclude the current record from the search
