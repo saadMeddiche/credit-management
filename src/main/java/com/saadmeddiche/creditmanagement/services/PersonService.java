@@ -8,7 +8,6 @@ import com.saadmeddiche.creditmanagement.repositories.PersonRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -45,18 +44,15 @@ public class PersonService {
 
     }
 
-
     public void deletePerson(Long id) {
         personRepository.deleteById(id);
     }
 
-    @Cacheable("persons")
     @Transactional(readOnly = true)
     public List<Person> getAllPersons() {
         return personRepository.findAll();
     }
 
-    @Cacheable(value = "persons", key = "#id")
     @Transactional(readOnly = true)
     public Optional<Person> getPersonById(Long id) {
         return personRepository.findById(id);
