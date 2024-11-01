@@ -5,9 +5,11 @@ import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.io.Serializable;
+
 @Embeddable @Builder
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
-public class PhoneNumber {
+public class PhoneNumber implements Serializable {
     @Column(length = 50) @NotBlank
     private String number;
 

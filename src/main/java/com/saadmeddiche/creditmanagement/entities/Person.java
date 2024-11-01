@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
-public class Person {
+public class Person implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_seq")
     private Long id;
@@ -24,10 +25,10 @@ public class Person {
     @Formula("concat(first_name, ' ', last_name)")
     private String fullName;
 
-    @Column(length = 100,unique = true)
+    @Column(length = 100,unique = false)
     private String email;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(uniqueConstraints = @UniqueConstraint(columnNames = {"number", "country_code"}))
     private Set<PhoneNumber> phoneNumbers;
 
@@ -37,7 +38,7 @@ public class Person {
     @Column(length = 5000)
     private String description;
 
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person",fetch = FetchType.EAGER)
     private Set<Credit> credits;
 
 }
