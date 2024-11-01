@@ -20,10 +20,14 @@ spring.jpa:
       dialect: ${JPA_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
 
 # Logger Configuration
-logging.level.org.hibernate:
-  SQL: DEBUG
-  type.descriptor.sql.BasicBinder: TRACE
-  orm.jdbc.bind: TRACE
+logging.level.org:
+  hibernate:
+    SQL: DEBUG
+    type.descriptor.sql.BasicBinder: TRACE
+    orm.jdbc.bind: TRACE
+  springframework:
+    data.*.*: trace
+    cache.*: trace
 
 # Seeders Configuration
 person-seeder:
