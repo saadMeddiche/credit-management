@@ -1,6 +1,7 @@
 package com.saadmeddiche.creditmanagement.entities;
 
 import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
+import com.saadmeddiche.creditmanagement.entities.listeners.PersonListener;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Formula;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Entity
 @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
+@EntityListeners(PersonListener.class)
 public class Person implements Serializable {
 
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "person_seq")
