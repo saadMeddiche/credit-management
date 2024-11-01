@@ -23,6 +23,16 @@ public class PersonService {
 
     private final ModelMapper modelMapper;
 
+    @Transactional(readOnly = true)
+    public List<Person> getAllPersons() {
+        return personRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<Person> getPersonById(Long id) {
+        return personRepository.findById(id);
+    }
+
     public void createPerson(@Valid PersonCreateRequest personCreateRequest) {
 
         Person person = modelMapper.map(personCreateRequest , Person.class);
@@ -48,13 +58,4 @@ public class PersonService {
         personRepository.deleteById(id);
     }
 
-    @Transactional(readOnly = true)
-    public List<Person> getAllPersons() {
-        return personRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Person> getPersonById(Long id) {
-        return personRepository.findById(id);
-    }
 }
