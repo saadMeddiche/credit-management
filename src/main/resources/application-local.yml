@@ -5,6 +5,11 @@ spring.datasource:
   password: ${DATABASE_PASSWORD:1234}
   driver-class-name: ${DATABASE_DRIVER:org.postgresql.Driver}
 
+# Redis configuration
+spring.data.redis:
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6379}
+
 # JPA Configuration
 spring.jpa:
   hibernate.ddl-auto: ${JPA_HIBERNATE_DDL_AUTO:update}
@@ -23,8 +28,8 @@ logging.level.org.hibernate:
 # Seeders Configuration
 person-seeder:
   enabled: ${PERSON_SEED_ENABLED:false}
-  person-count: ${PERSON_COUNT:200}
-  phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
+  person-count: ${PERSON_COUNT:200000}
+  phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:1}
 
 # Server Error Configuration
 server.error:
