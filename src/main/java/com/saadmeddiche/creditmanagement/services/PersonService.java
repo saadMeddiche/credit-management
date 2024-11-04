@@ -4,10 +4,13 @@ import com.saadmeddiche.creditmanagement.dtos.PersonCreateRequest;
 import com.saadmeddiche.creditmanagement.dtos.PersonUpdateRequest;
 import com.saadmeddiche.creditmanagement.entities.Person;
 import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
+import com.saadmeddiche.creditmanagement.global_constants.CacheNames;
 import com.saadmeddiche.creditmanagement.repositories.PersonRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -40,7 +43,8 @@ public class PersonService {
         personRepository.save(person);
     }
 
-    public void updatePerson(Person person , @Valid PersonUpdateRequest personUpdateRequest) {
+    @CachePut(value = CacheNames.PERSONS, key = "#result.id")
+    public Person updatePerson(Person person , @Valid PersonUpdateRequest personUpdateRequest) {
 
         modelMapper.map(personUpdateRequest , person);
 
@@ -52,8 +56,10 @@ public class PersonService {
             }
         });
 
+        return person;
     }
 
+    @CacheEvict(value = CacheNames.PERSONS, key = "#id")
     public void deletePerson(Long id) {
         personRepository.deleteById(id);
     }
