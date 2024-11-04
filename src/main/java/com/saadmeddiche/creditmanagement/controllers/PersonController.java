@@ -22,7 +22,7 @@ public class PersonController {
 
     private final PersonService personService;
 
-    @GetMapping(PersonAPIs.PERSONS) @Cacheable(value = CacheNames.PERSONS)
+    @GetMapping(PersonAPIs.PERSONS)
     public List<Person> getAllPersons() {
         return personService.getAllPersons();
     }
