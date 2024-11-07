@@ -32,8 +32,8 @@ logging.level.org:
 # Seeders Configuration
 person-seeder:
   enabled: ${PERSON_SEED_ENABLED:false}
-  person-count: ${PERSON_COUNT:200000}
-  phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:1}
+  person-count: ${PERSON_COUNT:20}
+  phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
 
 # Server Error Configuration
 server.error:
