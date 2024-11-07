@@ -1,0 +1,65 @@
+services:
+  # Spring Boot Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=local
+      - DATABASE_URL=jdbc:postgresql://db:5432/creditmanagement
+      - DATABASE_USERNAME=user
+      - DATABASE_PASSWORD=1234
+      - DATABASE_DRIVER=org.postgresql.Driver
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JPA_HIBERNATE_DDL_AUTO=update
+      - JPA_SHOW_SQL=false
+      - JPA_FORMAT_SQL=true
+      - JPA_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - PERSON_SEED_ENABLED=false
+      - PERSON_COUNT=20
+      - PHONE_NUMBER_PER_PERSON=2
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  # PostgreSQL Database
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=creditmanagement
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  # Redis
+  redis:
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+    ports:
+        - "6379:6379"
+    restart: unless-stopped
+
+# Volumes to persist database data
+volumes:
+  db_data:
+  redis_data:
+
+# Networks for communication
+networks:
+  app-network:
+    driver: bridge
