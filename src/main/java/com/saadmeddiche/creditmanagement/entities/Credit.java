@@ -1,5 +1,6 @@
 package com.saadmeddiche.creditmanagement.entities;
 
+import com.saadmeddiche.creditmanagement.enums.CreditType;
 import com.saadmeddiche.creditmanagement.enums.Currency;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,6 +23,9 @@ public class Credit {
 
     @Column(nullable = false) @Enumerated(EnumType.STRING)
     private Currency currency;
+
+    @Column(nullable = false) @Enumerated(EnumType.STRING)
+    private CreditType creditType;
 
     @Column(length = 250)
     private String reason;
