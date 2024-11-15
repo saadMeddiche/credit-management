@@ -38,7 +38,7 @@ public class Person implements Serializable {
     @Column(length = 5000)
     private String description;
 
-    @OneToMany(mappedBy = "person",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "person",fetch = FetchType.LAZY)
     private Set<Credit> credits;
 
 }

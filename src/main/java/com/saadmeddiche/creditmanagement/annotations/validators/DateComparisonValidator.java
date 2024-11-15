@@ -37,6 +37,17 @@ public class DateComparisonValidator implements ConstraintValidator<DateComparis
             Object endDateObj = endDateField.get(value);
 
             if (startDateObj instanceof LocalDateTime startDate && endDateObj instanceof LocalDateTime endDate) {
+
+                context.disableDefaultConstraintViolation();
+
+                context.buildConstraintViolationWithTemplate(String.format("The %s must be before the %s", startField, endField))
+                        .addPropertyNode(startField)
+                        .addConstraintViolation();
+
+                context.buildConstraintViolationWithTemplate(String.format("The %s must be after the %s", endField, startField))
+                        .addPropertyNode(endField)
+                        .addConstraintViolation();
+
                 return startDate.isBefore(endDate);
             }else {
                 logger.severe("Fields are not of type LocalDateTime");

@@ -6,6 +6,7 @@ import com.saadmeddiche.creditmanagement.exeptions.RecordNotFound;
 import com.saadmeddiche.creditmanagement.global_constants.CreditAPIs;
 import com.saadmeddiche.creditmanagement.services.CreditService;
 import com.saadmeddiche.creditmanagement.services.PersonService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class CreditController {
     private final PersonService personService;
 
     @PostMapping(CreditAPIs.CREATE_CREDIT) @ResponseStatus(HttpStatus.CREATED)
-    public void createCredit(@PathVariable Long personId , @RequestBody CreditCreateRequest creditCreateRequest){
+    public void createCredit(@PathVariable Long personId , @Valid @RequestBody CreditCreateRequest creditCreateRequest){
 
         Person person = personService.getPersonById(personId)
                 .orElseThrow(() -> new RecordNotFound(String.format("Person with id %d not found", personId)));

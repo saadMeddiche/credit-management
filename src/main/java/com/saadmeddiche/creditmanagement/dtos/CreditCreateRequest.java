@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 
-@DateComparison(startField = "grantDate", endField = "refundDate", message = "Refund date must be after grant date")
+@DateComparison(startField = "grantDate", endField = "refundDate")
 public record CreditCreateRequest(
         @NotNull @Positive Double amount,
         @NotNull Currency currency,
