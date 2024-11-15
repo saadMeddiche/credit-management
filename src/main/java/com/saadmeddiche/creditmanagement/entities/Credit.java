@@ -1,5 +1,6 @@
 package com.saadmeddiche.creditmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.saadmeddiche.creditmanagement.enums.CreditType;
 import com.saadmeddiche.creditmanagement.enums.Currency;
 import jakarta.persistence.*;
@@ -15,6 +16,7 @@ public class Credit {
     @Id @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "credit_seq")
     private Long id;
 
+    @JsonIgnoreProperties("credits")
     @ManyToOne @JoinColumn(nullable = false , updatable = false)
     private Person person;
 

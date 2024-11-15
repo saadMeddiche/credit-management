@@ -1,5 +1,6 @@
 package com.saadmeddiche.creditmanagement.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.*;
@@ -38,6 +39,7 @@ public class Person implements Serializable {
     @Column(length = 5000)
     private String description;
 
+    @JsonIgnoreProperties("person")
     @OneToMany(mappedBy = "person",fetch = FetchType.LAZY)
     private Set<Credit> credits;
 
