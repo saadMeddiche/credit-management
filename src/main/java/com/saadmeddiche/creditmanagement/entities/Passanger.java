@@ -26,6 +26,7 @@ public class Passanger extends AuditEntity {
 
     private String firstName;
     private String lastName;
+    private String pnr;
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "frequent_flyer_id")
