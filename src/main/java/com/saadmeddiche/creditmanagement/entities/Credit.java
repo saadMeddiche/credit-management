@@ -8,6 +8,8 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
+@NamedEntityGraph(name = "Credit.withPerson", attributeNodes = @NamedAttributeNode("person"))
+
 @Entity
 @Getter @Setter
 @Builder @AllArgsConstructor @NoArgsConstructor
@@ -17,7 +19,8 @@ public class Credit {
     private Long id;
 
     @JsonIgnoreProperties("credits")
-    @ManyToOne @JoinColumn(nullable = false , updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false , updatable = false)
     private Person person;
 
     @Column(nullable = false)

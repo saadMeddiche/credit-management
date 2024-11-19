@@ -23,7 +23,7 @@ public class PhoneNumber implements Serializable {
     @Column(length = 10)
     private String countryCode;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     @JsonIgnoreProperties("phoneNumbers")
     private Person person;
 
