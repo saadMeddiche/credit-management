@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.io.Serializable;
 
-@Embeddable @Builder
+@Embeddable @Builder @ToString
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor
 public class PhoneNumber implements Serializable {
     @Column(length = 50) @NotBlank

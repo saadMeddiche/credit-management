@@ -9,7 +9,7 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter
+@Getter @Setter @ToString
 @Builder @AllArgsConstructor @NoArgsConstructor
 public class Credit {
 
@@ -34,6 +34,6 @@ public class Credit {
 
     private LocalDateTime grantDate;
 
-    private LocalDateTime refundDate;
+    private LocalDateTime paymentDate;
 
 }
