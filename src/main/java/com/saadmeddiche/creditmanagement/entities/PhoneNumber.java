@@ -7,7 +7,7 @@ import lombok.*;
 import java.io.Serializable;
 
 @Entity
-@Builder @ToString(exclude = "person")
+@Builder
 @Getter @Setter
 @NoArgsConstructor @AllArgsConstructor
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"number", "country_code"}))

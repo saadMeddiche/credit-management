@@ -8,7 +8,7 @@ import org.hibernate.annotations.Formula;
 import java.io.Serializable;
 import java.util.Set;
 
-@Entity @ToString(exclude = {"credits"})
+@Entity
 @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
 public class Person implements Serializable {
