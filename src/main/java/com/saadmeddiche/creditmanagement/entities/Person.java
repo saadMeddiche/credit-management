@@ -33,7 +33,7 @@ public class Person implements Serializable {
 //    private Set<PhoneNumber> phoneNumbers;
 
     @JsonIgnoreProperties("person")
-    @OneToMany(mappedBy = "person" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "person")
     private Set<PhoneNumber> phoneNumbers;
 
     @Column(length = 50)
