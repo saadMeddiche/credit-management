@@ -48,14 +48,6 @@ public class PersonService {
 
         modelMapper.map(personUpdateRequest , person);
 
-        personUpdateRequest.phoneNumberRequests().forEach(phoneNumberRequest -> {
-            if(phoneNumberRequest.add()){
-                person.getPhoneNumbers().add(modelMapper.map(phoneNumberRequest , PhoneNumber.class));
-            } else {
-                person.getPhoneNumbers().removeIf(phoneNumber -> phoneNumber.getNumber().equals(phoneNumberRequest.number()) && phoneNumber.getCountryCode().equals(phoneNumberRequest.countryCode()));
-            }
-        });
-
         return person;
     }
 
