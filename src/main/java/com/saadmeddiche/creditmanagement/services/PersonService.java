@@ -3,7 +3,7 @@ package com.saadmeddiche.creditmanagement.services;
 import com.saadmeddiche.creditmanagement.dtos.PersonCreateRequest;
 import com.saadmeddiche.creditmanagement.dtos.PersonUpdateRequest;
 import com.saadmeddiche.creditmanagement.entities.Person;
-import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
+import com.saadmeddiche.creditmanagement.entities.PhoneNumber;
 import com.saadmeddiche.creditmanagement.global_constants.CacheNames;
 import com.saadmeddiche.creditmanagement.repositories.PersonRepository;
 import jakarta.validation.Valid;

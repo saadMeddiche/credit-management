@@ -1,7 +1,6 @@
 package com.saadmeddiche.creditmanagement.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.saadmeddiche.creditmanagement.entities.embeddables.PhoneNumber;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Formula;
@@ -9,7 +8,7 @@ import org.hibernate.annotations.Formula;
 import java.io.Serializable;
 import java.util.Set;
 
-@Entity @ToString(exclude = "credits")
+@Entity @ToString(exclude = {"credits"})
 @Getter @Setter @Builder
 @AllArgsConstructor @NoArgsConstructor
 public class Person implements Serializable {
@@ -29,8 +28,12 @@ public class Person implements Serializable {
     @Column(length = 100,unique = true)
     private String email;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(uniqueConstraints = @UniqueConstraint(columnNames = {"number", "country_code"}))
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    @CollectionTable(uniqueConstraints = @UniqueConstraint(columnNames = {"number", "country_code"}))
+//    private Set<PhoneNumber> phoneNumbers;
+
+    @JsonIgnoreProperties("person")
+    @OneToMany(mappedBy = "person" , cascade = CascadeType.ALL)
     private Set<PhoneNumber> phoneNumbers;
 
     @Column(length = 50)
@@ -40,7 +43,7 @@ public class Person implements Serializable {
     private String description;
 
     @JsonIgnoreProperties("person")
-    @OneToMany(mappedBy = "person",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "person")
     private Set<Credit> credits;
 
 }
