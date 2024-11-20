@@ -6,6 +6,7 @@ import com.saadmeddiche.creditmanagement.exeptions.RecordNotFound;
 import com.saadmeddiche.creditmanagement.global_constants.PhoneNumberAPIs;
 import com.saadmeddiche.creditmanagement.services.PersonService;
 import com.saadmeddiche.creditmanagement.services.PhoneNumberService;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class PhoneNumberController {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(PhoneNumberAPIs.PHONE_NUMBERS_CREATE)
-    public void createPhoneNumber(@PathVariable Long personId , @RequestBody List<PhoneNumberCreateRequest> phoneNumberCreateRequests) {
+    public void createPhoneNumber(@PathVariable Long personId ,  @RequestBody List<@Valid PhoneNumberCreateRequest> phoneNumberCreateRequests) {
 
         Person person = personService.getPersonById(personId)
                 .orElseThrow(() -> new RecordNotFound(String.format("Person with id %d not found", personId)));
