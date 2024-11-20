@@ -15,7 +15,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
@@ -36,10 +35,18 @@ public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
 
     @Override
     public void initialize(NotExist constraintAnnotation) {
+
+        // Extract data from the annotation
         this.entity = constraintAnnotation.entity();
         this.formFieldNames = constraintAnnotation.formFieldNames();
         this.entityFieldNames = constraintAnnotation.entityFieldNames();
         this.nameOfPathVariableContainingId = constraintAnnotation.id();
+
+        // Why ? Because formFieldNames is a required attribute
+        if(formFieldNames.length == 0) throw new IllegalArgumentException("The formFieldNames attribute must contain at least one field name");
+
+        // If the entityFieldNames is not provided, we assume that the formFieldNames are the same as the entityFieldNames
+        if(formFieldNames.length != entityFieldNames.length) entityFieldNames = formFieldNames;
     }
 
     @Override
@@ -53,36 +60,12 @@ public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
 
         Root<?> root = criteriaQuery.from(entity);
 
-        if(formFieldNames.length == 0) throw new IllegalArgumentException("The formFieldNames attribute must contain at least one field name");
+        // Create the first condition
+        Predicate predicate = getPredicate(criteriaBuilder, root, value, formFieldNames[0], entityFieldNames[0]);
 
-        if(formFieldNames.length != entityFieldNames.length) entityFieldNames = formFieldNames;
-
-        Predicate predicate;
-
-        try {
-            Field field = value.getClass().getDeclaredField(formFieldNames[0]);
-            field.setAccessible(true);
-            predicate = criteriaBuilder.equal(root.get(entityFieldNames[0]), field.get(value));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new IllegalArgumentException("The field " + formFieldNames[0] + " is not found in the request object");
-        }
-
+        // Create the other conditions
         for (int i = 1; i < formFieldNames.length; i++) {
-
-            String formFieldName = formFieldNames[i];
-
-            String entityFieldName = entityFieldNames.length > 0 ? entityFieldNames[i] : formFieldName;
-
-            try {
-                Field field = value.getClass().getDeclaredField(formFieldName);
-                field.setAccessible(true);
-                Object fieldValue = field.get(value);
-
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(entityFieldName), fieldValue));
-
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                throw new IllegalArgumentException("The field " + formFieldName + " is not found in the request object");
-            }
+            predicate = getPredicate(criteriaBuilder, root, predicate, value, formFieldNames[i], entityFieldNames[i]);
         }
 
         if(request.isHttpMethod(HttpMethod.PUT)) {
@@ -104,10 +87,30 @@ public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
 
         context.disableDefaultConstraintViolation();
 
-        context.buildConstraintViolationWithTemplate("Record with the same " + Arrays.stream(formFieldNames).reduce((s1, s2) -> s1 + " and " + s2) +" already exists")
-                .addPropertyNode(Arrays.stream(formFieldNames).reduce((s1, s2) -> s1 + "&" + s2).orElse(""))
+        context.buildConstraintViolationWithTemplate(entity.getSimpleName() + " with the same " + String.join(" , ", formFieldNames) + " already exists")
+                .addPropertyNode(String.join("&", formFieldNames))
                 .addConstraintViolation();
 
         return typedQuery.getSingleResult() == 0;
+    }
+
+    private Predicate getPredicate(CriteriaBuilder criteriaBuilder, Root<?> root, Object value, String formFieldName, String entityFieldName) {
+        try {
+            Field field = value.getClass().getDeclaredField(formFieldName);
+            field.setAccessible(true);
+            return criteriaBuilder.equal(root.get(entityFieldName), field.get(value));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalArgumentException("The field " + formFieldName + " is not found in the request object");
+        }
+    }
+
+    private Predicate getPredicate(CriteriaBuilder criteriaBuilder, Root<?> root, Predicate predicate, Object value, String formFieldName, String entityFieldName) {
+        try {
+            Field field = value.getClass().getDeclaredField(formFieldName);
+            field.setAccessible(true);
+            return criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(entityFieldName), field.get(value)));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalArgumentException("The field " + formFieldName + " is not found in the request object");
+        }
     }
 }
