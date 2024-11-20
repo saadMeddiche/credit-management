@@ -14,9 +14,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+
 @Component
 @RequiredArgsConstructor
-public class NotExistValidator implements ConstraintValidator<NotExist,String> {
+public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
 
     private final EntityManager entityManager;
 
@@ -24,7 +27,9 @@ public class NotExistValidator implements ConstraintValidator<NotExist,String> {
 
     private Class<?> entity;
 
-    private String fieldName;
+    private String[] formFieldNames;
+
+    private String[] entityFieldNames;
 
     private String nameOfPathVariableContainingId;
 
@@ -32,12 +37,13 @@ public class NotExistValidator implements ConstraintValidator<NotExist,String> {
     @Override
     public void initialize(NotExist constraintAnnotation) {
         this.entity = constraintAnnotation.entity();
-        this.fieldName = constraintAnnotation.fieldName();
+        this.formFieldNames = constraintAnnotation.formFieldNames();
+        this.entityFieldNames = constraintAnnotation.entityFieldNames();
         this.nameOfPathVariableContainingId = constraintAnnotation.id();
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
 
         if(value == null) return true;
 
@@ -47,7 +53,37 @@ public class NotExistValidator implements ConstraintValidator<NotExist,String> {
 
         Root<?> root = criteriaQuery.from(entity);
 
-        Predicate predicate = criteriaBuilder.equal(root.get(fieldName), value);
+        if(formFieldNames.length == 0) throw new IllegalArgumentException("The formFieldNames attribute must contain at least one field name");
+
+        if(formFieldNames.length != entityFieldNames.length) entityFieldNames = formFieldNames;
+
+        Predicate predicate;
+
+        try {
+            Field field = value.getClass().getDeclaredField(formFieldNames[0]);
+            field.setAccessible(true);
+            predicate = criteriaBuilder.equal(root.get(entityFieldNames[0]), field.get(value));
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalArgumentException("The field " + formFieldNames[0] + " is not found in the request object");
+        }
+
+        for (int i = 1; i < formFieldNames.length; i++) {
+
+            String formFieldName = formFieldNames[i];
+
+            String entityFieldName = entityFieldNames.length > 0 ? entityFieldNames[i] : formFieldName;
+
+            try {
+                Field field = value.getClass().getDeclaredField(formFieldName);
+                field.setAccessible(true);
+                Object fieldValue = field.get(value);
+
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get(entityFieldName), fieldValue));
+
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                throw new IllegalArgumentException("The field " + formFieldName + " is not found in the request object");
+            }
+        }
 
         if(request.isHttpMethod(HttpMethod.PUT)) {
 
@@ -65,6 +101,12 @@ public class NotExistValidator implements ConstraintValidator<NotExist,String> {
         criteriaQuery.select(criteriaBuilder.count(root)).where(predicate);
 
         TypedQuery<Long> typedQuery = entityManager.createQuery(criteriaQuery);
+
+        context.disableDefaultConstraintViolation();
+
+        context.buildConstraintViolationWithTemplate("Record with the same " + Arrays.stream(formFieldNames).reduce((s1, s2) -> s1 + " and " + s2) +" already exists")
+                .addPropertyNode(Arrays.stream(formFieldNames).reduce((s1, s2) -> s1 + "&" + s2).orElse(""))
+                .addConstraintViolation();
 
         return typedQuery.getSingleResult() == 0;
     }

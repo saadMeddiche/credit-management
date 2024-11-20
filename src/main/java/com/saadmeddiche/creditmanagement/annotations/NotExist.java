@@ -4,19 +4,19 @@ import com.saadmeddiche.creditmanagement.annotations.validators.NotExistValidato
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
-@Target({ElementType.FIELD})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
+@Repeatable(NotExits.class)
 @Constraint(validatedBy = NotExistValidator.class)
 public @interface NotExist {
 
     Class<?> entity();
 
-    String fieldName();
+    String[] formFieldNames();
+
+    String[] entityFieldNames() default {};
 
     String id() default "id"; // The name of path variable that contains the id of the record
 
