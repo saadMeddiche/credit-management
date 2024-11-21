@@ -11,6 +11,8 @@ import jakarta.persistence.criteria.Root;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,8 @@ public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
 
     private final DataRequestExtractor request;
 
+    private final MessageSource messageSource;
+
     private Class<?> entity;
 
     private String[] formFieldNames;
@@ -31,7 +35,6 @@ public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
     private String[] entityFieldNames;
 
     private String nameOfPathVariableContainingId;
-
 
     @Override
     public void initialize(NotExist constraintAnnotation) {
@@ -87,7 +90,7 @@ public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
 
         context.disableDefaultConstraintViolation();
 
-        context.buildConstraintViolationWithTemplate(entity.getSimpleName() + " with the same " + String.join(" , ", formFieldNames) + " already exists")
+        context.buildConstraintViolationWithTemplate(messageSource.getMessage("validation.not-exist", new Object[]{entity.getSimpleName(),String.join(" , ", formFieldNames)}, LocaleContextHolder.getLocale()))
                 .addPropertyNode(String.join("&", formFieldNames))
                 .addConstraintViolation();
 

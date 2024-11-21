@@ -3,22 +3,23 @@ package com.saadmeddiche.creditmanagement.annotations.validators;
 import com.saadmeddiche.creditmanagement.annotations.DateComparison;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.logging.Logger;
 
+@Component
+@RequiredArgsConstructor
 public class DateComparisonValidator implements ConstraintValidator<DateComparison, Object> {
 
     private String startField;
     private String endField;
     private final Logger logger = Logger.getLogger(DateComparisonValidator.class.getName());
-
-    @Autowired
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     @Override
     public void initialize(DateComparison constraintAnnotation) {
