@@ -3,6 +3,9 @@ package com.saadmeddiche.creditmanagement.annotations.validators;
 import com.saadmeddiche.creditmanagement.annotations.DateComparison;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
@@ -14,6 +17,9 @@ public class DateComparisonValidator implements ConstraintValidator<DateComparis
     private String endField;
     private final Logger logger = Logger.getLogger(DateComparisonValidator.class.getName());
 
+    @Autowired
+    private MessageSource messageSource;
+
     @Override
     public void initialize(DateComparison constraintAnnotation) {
         this.startField = constraintAnnotation.startField();
@@ -22,9 +28,7 @@ public class DateComparisonValidator implements ConstraintValidator<DateComparis
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
-        if (value == null) {
-            return true;
-        }
+        if (value == null) return false;
 
         try {
             Field startDateField = value.getClass().getDeclaredField(startField);
@@ -40,24 +44,28 @@ public class DateComparisonValidator implements ConstraintValidator<DateComparis
 
                 context.disableDefaultConstraintViolation();
 
-                context.buildConstraintViolationWithTemplate(String.format("The %s must be before the %s", startField, endField))
+                String beforeMessage = messageSource.getMessage("validation.date-comparison.before", new Object[]{startField,endField}, LocaleContextHolder.getLocale());
+
+                String afterMessage = messageSource.getMessage("validation.date-comparison.after", new Object[]{endField,startField}, LocaleContextHolder.getLocale());
+
+                context.buildConstraintViolationWithTemplate(beforeMessage)
                         .addPropertyNode(startField)
                         .addConstraintViolation();
 
-                context.buildConstraintViolationWithTemplate(String.format("The %s must be after the %s", endField, startField))
+                context.buildConstraintViolationWithTemplate(afterMessage)
                         .addPropertyNode(endField)
                         .addConstraintViolation();
 
                 return startDate.isBefore(endDate);
             }else {
                 logger.severe("Fields are not of type LocalDateTime");
-                logger.info("Validation will be false");
+                logger.warning("Validation will be false");
                 return false;
             }
 
         } catch (Exception e) {
             logger.severe("Error while comparing dates: " + e.getMessage());
-            logger.info("Validation will be false");
+            logger.warning("Validation will be false");
             return false;
         }
 
