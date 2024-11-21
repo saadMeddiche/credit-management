@@ -21,5 +21,4 @@ public class ErrorResponse {
 
     private Map<String, String> errors;
 
-    private String path;
 }
