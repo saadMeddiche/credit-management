@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @Service @Transactional
 @RequiredArgsConstructor @Validated
 public class CreditService {
@@ -27,5 +31,17 @@ public class CreditService {
 
         creditRepository.save(credit);
 
+    }
+
+    public Map<Person, List<Credit>> findCreditsThatReachedTheirPaymentDate() {
+
+        List<Object[]> data = creditRepository.findCreditsThatReachedTheirPaymentDate();
+
+        return data.stream().collect(
+                Collectors.groupingBy(
+                        objects -> (Person) objects[0],
+                        Collectors.mapping(objects -> (Credit) objects[1], Collectors.toList())
+                )
+        );
     }
 }
