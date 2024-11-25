@@ -7,6 +7,7 @@ import com.saadmeddiche.creditmanagement.services.CreditService;
 import com.saadmeddiche.creditmanagement.services.SimpleMailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -44,9 +45,12 @@ public class CreditsExportation implements Scheduler {
         }
 
         log.info("===> Credits exported <===");
+
+        // Stop the application after exporting the credits
+        System.exit(0);
     }
 
-    private Optional<File> export(List<Credit> credits) {
+    private Optional<byte[]> export(List<Credit> credits) {
         try {
             return Optional.of(new CreditExportService().export(credits));
         } catch (Exception e) {
@@ -55,9 +59,9 @@ public class CreditsExportation implements Scheduler {
         }
     }
 
-    private void sendMail(Person person, File file) {
+    private void sendMail(Person person, byte[] attachment) {
         try {
-            simpleMailService.sendMail(person.getEmail(), "Credits", "Please find attached the credits that reached their payment date", Collections.singletonList(file));
+            simpleMailService.sendMail(person.getEmail(), "Credits", "Please find attached the credits that reached their payment date", Collections.singletonList(Pair.of("credits.xlsx", attachment)));
         } catch (Exception e) {
             log.error("An error occurred while sending mail to {}" , person.getEmail(), e);
         }

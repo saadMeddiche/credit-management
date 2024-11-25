@@ -3,12 +3,13 @@ package com.saadmeddiche.creditmanagement.services;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.data.util.Pair;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.List;
 
 @Service
@@ -18,7 +19,7 @@ public class SimpleMailService {
     private final JavaMailSender javaMailSender;
 
     @Async
-    public void sendMail(String to, String subject, String body, List<File> attachments) throws MessagingException {
+    public void sendMail(String to, String subject, String body, List<Pair<String , byte[]>> attachments) throws MessagingException {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
@@ -32,8 +33,8 @@ public class SimpleMailService {
 
         mimeMessageHelper.setFrom("CREDIT_MANAGEMENT");
 
-        for (File attachment : attachments) {
-            mimeMessageHelper.addAttachment(attachment.getName(), attachment);
+        for (Pair<String , byte[]> attachment : attachments) {
+            mimeMessageHelper.addAttachment(attachment.getFirst(), new ByteArrayResource(attachment.getSecond()));
         }
 
         javaMailSender.send(mimeMessage);
