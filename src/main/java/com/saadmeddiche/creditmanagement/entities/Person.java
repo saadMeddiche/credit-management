@@ -33,7 +33,7 @@ public class Person implements Serializable {
 //    private Set<PhoneNumber> phoneNumbers;
 
     @JsonIgnoreProperties("person")
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private Set<PhoneNumber> phoneNumbers;
 
     @Column(length = 50)
@@ -43,7 +43,7 @@ public class Person implements Serializable {
     private String description;
 
     @JsonIgnoreProperties("person")
-    @OneToMany(mappedBy = "person")
+    @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private Set<Credit> credits;
 
 }

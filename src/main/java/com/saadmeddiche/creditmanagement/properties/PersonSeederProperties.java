@@ -15,6 +15,7 @@ public class PersonSeederProperties implements SeederProperties {
     private boolean enabled;
     private Integer personCount;
     private Integer phoneNumberPerPerson;
+    private Integer creditPerPerson;
 
     @Override
     public boolean isEnabled() {
