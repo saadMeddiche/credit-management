@@ -12,6 +12,7 @@ import java.util.List;
 public interface CreditRepository extends JpaRepository<Credit, Long> {
 
     @EntityGraph(value = "Credit.withPerson")
-    @Query("SELECT c FROM Credit c WHERE c.paymentDate <= CURRENT_TIMESTAMP")
-    List<Credit> findCreditsThatReachedTheirPaymentDate();
+    @Query("SELECT c.person, c FROM Credit c WHERE c.paymentDate <= CURRENT_TIMESTAMP")
+    List<Object[]> findCreditsThatReachedTheirPaymentDate();
+
 }
