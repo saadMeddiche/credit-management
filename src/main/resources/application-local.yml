@@ -42,14 +42,14 @@ server.error:
 
 # SMTP Configuration
 spring.mail:
-  host: sandbox.smtp.mailtrap.io
-  port: 25
-  username: cc062b2d918e03
-  password: 31346ed1dfaee3
+  host: localhost
+  port: 2525
+#  username: TEST
+#  password: TEST
   properties.mail:
-    debug: true
+    debug: false
     transport.protocol: smtp
-    smtp.auth: true
+    smtp.auth: false
     smtp.connectiontimeout: 5000
     smtp.timeout: 5000
     smtp.writetimeout: 5000
