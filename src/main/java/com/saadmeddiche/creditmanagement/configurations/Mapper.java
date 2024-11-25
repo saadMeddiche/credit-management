@@ -1,4 +1,4 @@
-package com.saadmeddiche.creditmanagement.beans;
+package com.saadmeddiche.creditmanagement.configurations;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.record.RecordModule;
