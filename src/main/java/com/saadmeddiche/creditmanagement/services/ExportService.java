@@ -1,15 +1,15 @@
 package com.saadmeddiche.creditmanagement.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-import jakarta.annotation.PostConstruct;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.util.List;
-import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+@Slf4j
 public abstract class ExportService<T> {
 
     private final Workbook workbook;
@@ -19,8 +19,6 @@ public abstract class ExportService<T> {
     private int rowIndex;
 
     private final ByteArrayOutputStream outputStream;
-
-    private final Logger logger;
 
     private final String[] fieldNames;
 
@@ -32,7 +30,6 @@ public abstract class ExportService<T> {
         this.workbook = new XSSFWorkbook();
         this.sheet = workbook.createSheet(sheetName());
         this.outputStream = new ByteArrayOutputStream();
-        this.logger = Logger.getLogger(this.getClass().getName());
         this.fieldNames = extractFieldNames();
         this.rowIndex = 0;
     }
@@ -72,8 +69,8 @@ public abstract class ExportService<T> {
                     Object value = field.get(data);
                     row.createCell(j).setCellValue(value == null ? "" : value.toString());
                 } catch (Exception e) {
-                    logger.warning("Error occurred while populating data rows");
-                    logger.warning(e.getMessage());
+                    log.warn("Error occurred while populating data row number {}", rowIndex);
+                    log.trace("Exception :: {}", e.getMessage());
                 }
             }
         }
@@ -89,8 +86,8 @@ public abstract class ExportService<T> {
         try {
             workbook.write(outputStream);
         } catch (Exception e) {
-            logger.warning("Error occurred while writing to output stream");
-            logger.warning(e.getMessage());
+            log.warn("Error occurred while writing to output stream");
+            log.trace("Exception :: {}",e.getMessage());
         }
     }
 
@@ -98,15 +95,15 @@ public abstract class ExportService<T> {
         try {
             workbook.close();
         } catch (Exception e) {
-            logger.warning("Error occurred while closing workbook");
-            logger.warning(e.getMessage());
+            log.warn("Error occurred while closing workbook");
+            log.trace("Exception :: {}",e.getMessage());
         }
 
         try {
             outputStream.close();
         } catch (Exception e) {
-            logger.warning("Error occurred while closing output stream");
-            logger.warning(e.getMessage());
+            log.warn("Error occurred while closing output stream");
+            log.trace("Exception :: {}",e.getMessage());
         }
     }
 }
