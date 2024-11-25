@@ -31,7 +31,7 @@ logging.level.org:
 
 # Seeders Configuration
 person-seeder:
-  enabled: ${PERSON_SEED_ENABLED:true}
+  enabled: ${PERSON_SEED_ENABLED:false}
   person-count: ${PERSON_COUNT:50}
   phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
   credit-per-person: ${CREDIT_PER_PERSON:2}
