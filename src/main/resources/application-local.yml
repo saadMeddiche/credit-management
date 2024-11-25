@@ -40,17 +40,18 @@ server.error:
   include-stacktrace: ${INCLUDE_STACKTRACE:NEVER}
   include-message: ${INCLUDE_MESSAGE:ALWAYS}
 
+# docker run --rm -it -p 5000:80 -p 2525:25 rnwood/smtp4dev
 # SMTP Configuration
 spring.mail:
-  host: localhost
-  port: 2525
-#  username: TEST
-#  password: TEST
+  host: ${MAIL_HOST:localhost}
+  port: ${MAIL_PORT:2525}
+  username: ${MAIL_USERNAME:TEST}
+  password: ${MAIL_PASSWORD:TEST}
   properties.mail:
-    debug: false
-    transport.protocol: smtp
-    smtp.auth: false
-    smtp.connectiontimeout: 5000
-    smtp.timeout: 5000
-    smtp.writetimeout: 5000
-    smtp.starttls.enable: true
+    debug: ${MAIL_DEBUG:false}
+    transport.protocol: ${MAIL_TRANSPORT_PROTOCOL:smtp}
+    smtp.auth: ${MAIL_SMTP_AUTH:false}
+    smtp.connectiontimeout: ${MAIL_SMTP_CONNECTION_TIMEOUT:5000}
+    smtp.timeout: ${MAIL_SMTP_TIMEOUT:5000}
+    smtp.writetimeout: ${MAIL_SMTP_WRITE_TIMEOUT:5000}
+    smtp.starttls.enable: ${MAIL_SMTP_STARTTLS_ENABLE:true}

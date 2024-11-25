@@ -22,3 +22,18 @@ spring.jpa:
 server.error:
   include-stacktrace: ${INCLUDE_STACKTRACE:NEVER}
   include-message: ${INCLUDE_MESSAGE:NEVER}
+
+# SMTP Configuration
+spring.mail:
+  host: ${MAIL_HOST}
+  port: ${MAIL_PORT}
+  username: ${MAIL_USERNAME}
+  password: ${MAIL_PASSWORD}
+  properties.mail:
+    debug: ${MAIL_DEBUG:false}
+    transport.protocol: ${MAIL_TRANSPORT_PROTOCOL:smtp}
+    smtp.auth: ${MAIL_SMTP_AUTH:false}
+    smtp.connectiontimeout: ${MAIL_SMTP_CONNECTION_TIMEOUT:5000}
+    smtp.timeout: ${MAIL_SMTP_TIMEOUT:5000}
+    smtp.writetimeout: ${MAIL_SMTP_WRITE_TIMEOUT:5000}
+    smtp.starttls.enable: ${MAIL_SMTP_STARTTLS_ENABLE:true}
