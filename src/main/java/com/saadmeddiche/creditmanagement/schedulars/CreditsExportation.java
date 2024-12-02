@@ -25,7 +25,7 @@ public class CreditsExportation implements Scheduler {
 
     private final SimpleMailService simpleMailService;
 
-    @Override @Scheduled(cron = "0/10 * * * * *")
+    @Override @Scheduled(cron = "* * 1 * * *")
     public void task() {
         log.info("===> Exporting credits <===");
         Map<Person, List<Credit>> creditMap = creditService.findCreditsThatReachedTheirPaymentDate();
