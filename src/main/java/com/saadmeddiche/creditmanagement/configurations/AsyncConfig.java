@@ -9,7 +9,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @EnableAsync
 @Configuration
-public class Async {
+public class AsyncConfig {
 
     // Source :: https://medium.com/javarevisited/how-does-spring-boot-implement-asynchronous-programming-this-is-how-masters-do-it-e89fc9245928
     @Bean(name = "myAsyncPoolTaskExecutor")

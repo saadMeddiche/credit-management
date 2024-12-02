@@ -1,13 +1,14 @@
 package com.saadmeddiche.creditmanagement.configurations;
 
+import com.github.javafaker.Faker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class Faker {
+public class FakerConfig {
 
-    @Bean(name = "customFaker")
-    public Faker customFaker() {
+    @Bean
+    public Faker faker() {
         return new Faker();
     }
 
