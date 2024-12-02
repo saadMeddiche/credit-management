@@ -6,4 +6,5 @@ public class PersonAPIs {
     public static final String PERSONS_UPDATE = "/persons/{id}";
     public static final String PERSONS_CREATE = "/persons";
     public static final String PERSONS_DELETE = "/persons/{id}";
+    public static final String PERSONS_GENERATE_FILE = "/persons/generate-file";
 }
