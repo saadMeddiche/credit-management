@@ -32,15 +32,17 @@ public class PersonFileCreator {
                                    @PositiveOrZero(message = "KnownPersonCount must not be negative") Long knownPersonCount,
                                    @PositiveOrZero(message = "UnknownPersonCount must not be negative") Long unknownPersonCount) {
 
+        if (currentPaths.contains(path))
+            throw new IllegalArgumentException("This path is already in use");
+
         File file = createFile(path); log.info("File created successfully at path: {}", file.getAbsolutePath());
 
         writeToFile(file, knownPersonCount, unknownPersonCount); log.info("Data written successfully to the file");
 
+        currentPaths.remove(path);
     }
 
     private File createFile(String path) {
-        if (currentPaths.contains(path))
-            throw new IllegalArgumentException("This path is already in use");
 
         File file = new File(path);
 
