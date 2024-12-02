@@ -56,9 +56,9 @@ public class PersonFileCreator {
                 throw new IllegalArgumentException("File already exists");
             }
 
-        } catch (Exception e) {
-            log.error("Error while creating the file", e);
-            throw new RuntimeException("Something went wrong while creating the file");
+        } catch (IOException | SecurityException e) {
+            log.error("An error occurred while creating the file", e);
+            throw new RuntimeException(e);
         }
 
         return file;
