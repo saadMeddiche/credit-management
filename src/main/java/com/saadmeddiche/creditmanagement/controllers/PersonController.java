@@ -6,7 +6,7 @@ import com.saadmeddiche.creditmanagement.entities.Person;
 import com.saadmeddiche.creditmanagement.exeptions.RecordNotFound;
 import com.saadmeddiche.creditmanagement.global_constants.CacheNames;
 import com.saadmeddiche.creditmanagement.global_constants.PersonAPIs;
-import com.saadmeddiche.creditmanagement.services.PersonFileCreator;
+import com.saadmeddiche.creditmanagement.services.PersonFileGenerator;
 import com.saadmeddiche.creditmanagement.services.PersonService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -23,7 +23,7 @@ public class PersonController {
 
     private final PersonService personService;
 
-    private final PersonFileCreator personFileCreator;
+    private final PersonFileGenerator personFileGenerator;
 
     @GetMapping(PersonAPIs.PERSONS)
     public List<Person> getAllPersons() {
@@ -63,7 +63,7 @@ public class PersonController {
     @GetMapping(PersonAPIs.PERSONS_GENERATE_FILE) @ResponseStatus(HttpStatus.NO_CONTENT)
     public void generatePersonFile(@RequestParam String path, @RequestParam Long knownPersonCount, @RequestParam Long unknownPersonCount) {
 
-        personFileCreator.generatePersonFile(path, knownPersonCount, unknownPersonCount);
+        personFileGenerator.generatePersonFile(path, knownPersonCount, unknownPersonCount);
 
     }
 

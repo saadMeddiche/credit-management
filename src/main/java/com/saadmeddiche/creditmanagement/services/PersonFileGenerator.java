@@ -18,7 +18,7 @@ import java.util.List;
 
 @Service @Slf4j
 @Validated @RequiredArgsConstructor
-public class PersonFileCreator {
+public class PersonFileGenerator {
 
     private final List<String> currentPaths = Collections.synchronizedList(new ArrayList<>());
 
