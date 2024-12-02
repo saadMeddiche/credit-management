@@ -11,7 +11,6 @@ import org.springframework.data.util.Pair;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +44,6 @@ public class CreditsExportation implements Scheduler {
         }
 
         log.info("===> Credits exported <===");
-
-        // Stop the application after exporting the credits
-        System.exit(0);
     }
 
     private Optional<byte[]> export(List<Credit> credits) {
