@@ -6,6 +6,7 @@ import com.saadmeddiche.creditmanagement.entities.Person;
 import com.saadmeddiche.creditmanagement.exeptions.RecordNotFound;
 import com.saadmeddiche.creditmanagement.global_constants.CacheNames;
 import com.saadmeddiche.creditmanagement.global_constants.PersonAPIs;
+import com.saadmeddiche.creditmanagement.services.PersonDataCreator;
 import com.saadmeddiche.creditmanagement.services.PersonFileGenerator;
 import com.saadmeddiche.creditmanagement.services.PersonService;
 import jakarta.validation.Valid;
@@ -24,6 +25,8 @@ public class PersonController {
     private final PersonService personService;
 
     private final PersonFileGenerator personFileGenerator;
+
+    private final PersonDataCreator personDataCreator;
 
     @GetMapping(PersonAPIs.PERSONS)
     public List<Person> getAllPersons() {
@@ -64,6 +67,13 @@ public class PersonController {
     public void generatePersonFile(@RequestParam String path, @RequestParam Long knownPersonCount, @RequestParam Long unknownPersonCount) {
 
         personFileGenerator.generatePersonFile(path, knownPersonCount, unknownPersonCount);
+
+    }
+
+    @GetMapping(PersonAPIs.PERSONS_DATA_CREATION) @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void createPersonData(@RequestParam String path) {
+
+        personDataCreator.createPersonData(path);
 
     }
 
