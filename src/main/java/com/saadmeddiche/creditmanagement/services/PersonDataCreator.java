@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -25,20 +26,35 @@ public class PersonDataCreator {
     public void createPersonData(@NotEmpty(message = "Path must not be null nor empty.") String path) {
         try (Stream<String> stream = Files.lines(Paths.get(path))) {
 
+            log.debug("Reading data from the file");
             List<Person> persons = extractPersons(stream);
+            log.debug("Data extracted successfully");
 
+
+            log.debug("Checking if persons already exist in the database");
             Map<Boolean, List<Person>> partitioned = persons.stream()
                     .collect(Collectors.partitioningBy(person -> personRepository.existsByEmail(person.getEmail())));
+            log.debug("Partitioned the data successfully");
 
+            log.debug("Saving newPersons ...");
             List<Person> newPersons = partitioned.get(Boolean.FALSE);
 
             if (!newPersons.isEmpty()) {
-                personRepository.saveAll(newPersons);
+
+                Map<String,Person> emailPersons = new LinkedHashMap<>();
+
+                for (Person newPerson : newPersons) {
+                    emailPersons.put(newPerson.getEmail(), newPerson);
+                }
+
+                personRepository.saveAll(emailPersons.values());
+
                 log.info("New persons added to the database");
             } else {
                 log.info("No new persons to add to the database");
             }
 
+            log.debug("Updating existingPersons ...");
             List<Person> existingPersons = partitioned.get(Boolean.TRUE);
 
             if (!existingPersons.isEmpty()) {
