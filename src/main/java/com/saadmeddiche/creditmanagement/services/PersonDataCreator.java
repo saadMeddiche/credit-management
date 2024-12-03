@@ -58,19 +58,28 @@ public class PersonDataCreator {
             List<Person> existingPersons = partitioned.get(Boolean.TRUE);
 
             if (!existingPersons.isEmpty()) {
+
+                log.debug("Getting existing persons from the database");
+                List<Person> personList = personRepository.findByEmailIn(existingPersons.stream().map(Person::getEmail).toList());
+
+                log.debug("Mapping existing persons to a map");
+                Map<String,Person> emailPersons = new LinkedHashMap<>();
+
                 for (Person existingPerson : existingPersons) {
-
-                    Person person = personRepository.findByEmail(existingPerson.getEmail())
-                            .orElseThrow(() -> new RuntimeException("Person not found in the database, but it should be there"));
-
-                    person.setFirstName(existingPerson.getFirstName());
-                    person.setLastName(existingPerson.getLastName());
-                    person.setJob(existingPerson.getJob());
-                    person.setDescription(existingPerson.getDescription());
-
-                    personRepository.save(person);
-
+                    emailPersons.put(existingPerson.getEmail(), existingPerson);
                 }
+
+                log.debug("Updating existing persons ...");
+                for (Person person : personList) {
+                    Person newPerson = emailPersons.get(person.getEmail());
+                    person.setFirstName(newPerson.getFirstName());
+                    person.setLastName(newPerson.getLastName());
+                    person.setJob(newPerson.getJob());
+                    person.setDescription(newPerson.getDescription());
+                }
+
+                personRepository.saveAll(personList);
+
                 log.info("Persons updated in the database");
             } else {
                 log.info("No persons already exist in the database");
