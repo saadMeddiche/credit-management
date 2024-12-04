@@ -52,6 +52,8 @@ public class PersonDataCreator {
     // Returns what is left of the rawEmails after removing the emails of the persons
     private Map<String,Person> updatePersons(List<Person> persons, Map<String,Person> rawEmails) {
 
+        Set<String> updatedEmails = new HashSet<>();
+
         for (Person person : persons) {
 
             Person rawPerson = rawEmails.get(person.getEmail());
@@ -61,17 +63,19 @@ public class PersonDataCreator {
             person.setJob(rawPerson.getJob());
             person.setDescription(rawPerson.getDescription());
 
-            rawEmails.remove(person.getEmail());
-
+            updatedEmails.add(person.getEmail());
         }
 
         personRepository.saveAll(persons);
+
+        // Remove the emails of the persons from the rawEmails
+        rawEmails.keySet().removeAll(updatedEmails);
 
         return rawEmails;
     }
 
     private List<Person> extractPersons(Stream<String> lines) {
-        return lines.map(this::extractPerson).toList();
+        return lines.map(this::extractPerson).collect(Collectors.toList());
     }
 
     private Person extractPerson(String line) {
