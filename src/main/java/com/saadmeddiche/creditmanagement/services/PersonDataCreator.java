@@ -11,9 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -24,74 +22,56 @@ public class PersonDataCreator {
     private final PersonRepository personRepository;
 
     public void createPersonData(@NotEmpty(message = "Path must not be null nor empty.") String path) {
-        try (Stream<String> stream = Files.lines(Paths.get(path))) {
+        try (Stream<String> lines = Files.lines(Paths.get(path))) {
 
-            log.debug("Reading data from the file");
-            List<Person> persons = extractPersons(stream);
-            log.debug("Data extracted successfully");
+            log.debug("[1*] Reading raw data from the file");
+            List<Person> rawPersons = extractPersons(lines);
+            log.debug("[1-] Data extracted successfully");
 
+            log.debug("[2*] Extracting raw emails from the data");
+            Map<String,Person> rawEmails = extractEmails(rawPersons);
+            log.debug("[2-] Emails extracted successfully");
 
-            log.debug("Checking if persons already exist in the database");
-            Map<Boolean, List<Person>> partitioned = persons.stream()
-                    .collect(Collectors.partitioningBy(person -> personRepository.existsByEmail(person.getEmail())));
-            log.debug("Partitioned the data successfully");
+            log.debug("[3*] Fetching persons from the database using the raw emails");
+            List<Person> persons = personRepository.findByEmailIn(rawEmails.keySet());
+            log.debug("[3-] Persons fetched successfully");
 
-            log.debug("Saving newPersons ...");
-            List<Person> newPersons = partitioned.get(Boolean.FALSE);
+            log.debug("[4*] Updating persons");
+            Map<String,Person> emailsOfNotExitedPersons =  updatePersons(persons, rawEmails);
+            log.debug("[4-] Persons updated successfully");
 
-            if (!newPersons.isEmpty()) {
-
-                Map<String,Person> emailPersons = new LinkedHashMap<>();
-
-                for (Person newPerson : newPersons) {
-                    emailPersons.put(newPerson.getEmail(), newPerson);
-                }
-
-                personRepository.saveAll(emailPersons.values());
-
-                log.info("New persons added to the database");
-            } else {
-                log.info("No new persons to add to the database");
-            }
-
-            log.debug("Updating existingPersons ...");
-            List<Person> existingPersons = partitioned.get(Boolean.TRUE);
-
-            if (!existingPersons.isEmpty()) {
-
-                log.debug("Getting existing persons from the database");
-                List<Person> personList = personRepository.findByEmailIn(existingPersons.stream().map(Person::getEmail).toList());
-
-                log.debug("Mapping existing persons to a map");
-                Map<String,Person> emailPersons = new LinkedHashMap<>();
-
-                for (Person existingPerson : existingPersons) {
-                    emailPersons.put(existingPerson.getEmail(), existingPerson);
-                }
-
-                log.debug("Updating existing persons ...");
-                for (Person person : personList) {
-                    Person newPerson = emailPersons.get(person.getEmail());
-                    person.setFirstName(newPerson.getFirstName());
-                    person.setLastName(newPerson.getLastName());
-                    person.setJob(newPerson.getJob());
-                    person.setDescription(newPerson.getDescription());
-                }
-
-                personRepository.saveAll(personList);
-
-                log.info("Persons updated in the database");
-            } else {
-                log.info("No persons already exist in the database");
-            }
+            log.debug("[5*] Saving the persons that are not in the database");
+            personRepository.saveAll(emailsOfNotExitedPersons.values());
+            log.debug("[5-] Persons saved successfully");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<Person> extractPersons(Stream<String> stream) {
-        return stream.map(this::extractPerson).toList();
+    // Returns what is left of the rawEmails after removing the emails of the persons
+    private Map<String,Person> updatePersons(List<Person> persons, Map<String,Person> rawEmails) {
+
+        for (Person person : persons) {
+
+            Person rawPerson = rawEmails.get(person.getEmail());
+
+            person.setFirstName(rawPerson.getFirstName());
+            person.setLastName(rawPerson.getLastName());
+            person.setJob(rawPerson.getJob());
+            person.setDescription(rawPerson.getDescription());
+
+            rawEmails.remove(person.getEmail());
+
+        }
+
+        personRepository.saveAll(persons);
+
+        return rawEmails;
+    }
+
+    private List<Person> extractPersons(Stream<String> lines) {
+        return lines.map(this::extractPerson).toList();
     }
 
     private Person extractPerson(String line) {
@@ -105,5 +85,14 @@ public class PersonDataCreator {
                 .job(data[3])
                 .description(data[4])
                 .build();
+    }
+
+    private Map<String,Person> extractEmails(List<Person> persons) {
+        return persons.stream()
+                .collect(Collectors.toMap(this::extractEmail, person -> person, (existing, replacement) -> replacement));
+    }
+
+    private String extractEmail(Person person) {
+        return person.getEmail();
     }
 }

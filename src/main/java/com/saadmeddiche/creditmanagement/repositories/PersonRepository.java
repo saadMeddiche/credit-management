@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
@@ -20,10 +20,6 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query("SELECT p.email FROM Person p ORDER BY p.id ASC LIMIT :limit")
     List<String> findAllEmailsWithLimit(@Param("limit") Long limit);
 
-    boolean existsByEmail(String email);
-
-    Optional<Person> findByEmail(String email);
-
-    List<Person> findByEmailIn(List<String> emails);
+    List<Person> findByEmailIn(Set<String> emails);
 
 }
