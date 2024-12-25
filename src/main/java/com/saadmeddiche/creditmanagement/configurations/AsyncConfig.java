@@ -16,13 +16,13 @@ public class AsyncConfig {
     public ThreadPoolTaskExecutor executor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         // Core thread count.
-        taskExecutor.setCorePoolSize(10);
+        taskExecutor.setCorePoolSize(5);
         // The maximum number of threads maintained in the thread pool. Only when the buffer queue is full will threads exceeding the core thread count be requested.
-        taskExecutor.setMaxPoolSize(100);
+        taskExecutor.setMaxPoolSize(10);
         // Cache queue.
         taskExecutor.setQueueCapacity(50);
         // Allowed idle time. Threads other than core threads will be destroyed after the idle time arrives.
-        taskExecutor.setKeepAliveSeconds(200);
+        taskExecutor.setKeepAliveSeconds(30);
         // Thread name prefix for asynchronous methods.
         taskExecutor.setThreadNamePrefix("async-");
         /**
