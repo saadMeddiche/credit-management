@@ -3,6 +3,7 @@ package com.saadmeddiche.creditmanagement.services;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.util.Pair;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -12,13 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service @Slf4j
 @RequiredArgsConstructor
 public class SimpleMailService {
 
     private final JavaMailSender javaMailSender;
 
-    @Async
+    @Async("myAsyncPoolTaskExecutor")
     public void sendMail(String from, String to, String subject, String body, List<Pair<String , byte[]>> attachments) throws MessagingException {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -38,5 +39,6 @@ public class SimpleMailService {
         }
 
         javaMailSender.send(mimeMessage);
+        log.info("Mail sent to {}", to);
     }
 }
