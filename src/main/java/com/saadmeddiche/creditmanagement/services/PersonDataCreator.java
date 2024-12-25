@@ -33,7 +33,7 @@ public class PersonDataCreator {
             log.debug("[2-] Emails extracted successfully");
 
             log.debug("[3*] Fetching persons from the database using the raw emails");
-            List<Person> persons = personRepository.findByEmailIn(rawEmails.keySet());
+            List<Person> persons = pullPersons(rawEmails.keySet());
             log.debug("[3-] Persons fetched successfully");
 
             log.debug("[4*] Updating persons");
@@ -47,6 +47,21 @@ public class PersonDataCreator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private List<Person> pullPersons(Set<String> emails) {
+
+        List<Person> persons = new ArrayList<>();
+
+        int batchSize = 65535;
+
+        for (int i = 0; i < emails.size(); i += batchSize) {
+            List<String> batchEmails = emails.stream().skip(i).limit(batchSize).toList();
+            persons.addAll(personRepository.findByEmailIn(new HashSet<>(batchEmails)));
+        }
+
+        return persons;
+
     }
 
     // Returns what is left of the rawEmails after removing the emails of the persons
