@@ -10,6 +10,7 @@ import com.saadmeddiche.creditmanagement.enums.Currency;
 import com.saadmeddiche.creditmanagement.properties.PersonSeederProperties;
 import com.saadmeddiche.creditmanagement.repositories.PersonRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -20,7 +21,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Order(1)
-@Profile("local")
+@Profile("local") @Slf4j
 @RequiredArgsConstructor @Configuration
 @Conditional(PersonSeederEnabledCondition.class)
 public class PersonSeeder extends Seeder {
@@ -31,6 +32,7 @@ public class PersonSeeder extends Seeder {
 
     private final Faker faker = new Faker();
 
+    private final Set<String> usedEmails = new HashSet<>();
 
     @Override
     public void seeding() {
@@ -42,14 +44,17 @@ public class PersonSeeder extends Seeder {
         }
         personRepository.saveAll(persons);
         Date end = new Date();
-        System.out.println("PersonSeeder: " + properties.getPersonCount() + " persons have been seeded in " + (end.getTime() - start.getTime()) + " ms");
+
+        log.info("{} persons have been seeded in {} ms", properties.getPersonCount(), (end.getTime() - start.getTime()));
+        log.info("{} phone numbers have been seeded", properties.getPersonCount() * properties.getPhoneNumberPerPerson());
+        log.info("{} credits have been seeded", properties.getPersonCount() * properties.getCreditPerPerson());
     }
 
     private Person buildPerson() {
         Person person = Person.builder()
                 .firstName(faker.name().firstName())
                 .lastName(faker.name().lastName())
-                .email(faker.internet().emailAddress())
+                .email(generateUniqueEmail())
                 .job(faker.company().profession())
                 .description(faker.lorem().paragraph())
                 .build();
@@ -95,6 +100,16 @@ public class PersonSeeder extends Seeder {
                 .paymentDate(faker.date().future(365, TimeUnit.DAYS).toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime())
                 .person(person)
                 .build();
+    }
+
+    private String generateUniqueEmail() {
+        String email;
+        do {
+            email = faker.internet().emailAddress();
+        } while (usedEmails.contains(email));
+
+        usedEmails.add(email);
+        return email;
     }
 
 }
