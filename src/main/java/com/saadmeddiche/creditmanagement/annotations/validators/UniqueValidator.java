@@ -1,6 +1,6 @@
 package com.saadmeddiche.creditmanagement.annotations.validators;
 
-import com.saadmeddiche.creditmanagement.annotations.NotExist;
+import com.saadmeddiche.creditmanagement.annotations.Unique;
 import com.saadmeddiche.creditmanagement.utils.DataRequestExtractor;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
@@ -20,7 +20,7 @@ import java.lang.reflect.Field;
 
 @Component
 @RequiredArgsConstructor
-public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
+public class UniqueValidator implements ConstraintValidator<Unique,Object> {
 
     private final EntityManager entityManager;
 
@@ -37,7 +37,7 @@ public class NotExistValidator implements ConstraintValidator<NotExist,Object> {
     private String nameOfPathVariableContainingId;
 
     @Override
-    public void initialize(NotExist constraintAnnotation) {
+    public void initialize(Unique constraintAnnotation) {
 
         // Extract data from the annotation
         this.entity = constraintAnnotation.entity();

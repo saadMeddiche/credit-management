@@ -1,6 +1,6 @@
 package com.saadmeddiche.creditmanagement.annotations;
 
-import com.saadmeddiche.creditmanagement.annotations.validators.NotExistValidator;
+import com.saadmeddiche.creditmanagement.annotations.validators.UniqueValidator;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -8,9 +8,9 @@ import java.lang.annotation.*;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(NotExits.class)
-@Constraint(validatedBy = NotExistValidator.class)
-public @interface NotExist {
+@Repeatable(Uniques.class)
+@Constraint(validatedBy = UniqueValidator.class)
+public @interface Unique {
 
     Class<?> entity();
 

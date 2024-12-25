@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NotExits {
-    NotExist[] value();
+public @interface Uniques {
+    Unique[] value();
 }
