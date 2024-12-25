@@ -19,19 +19,19 @@ public class SimpleMailService {
     private final JavaMailSender javaMailSender;
 
     @Async
-    public void sendMail(String to, String subject, String body, List<Pair<String , byte[]>> attachments) throws MessagingException {
+    public void sendMail(String from, String to, String subject, String body, List<Pair<String , byte[]>> attachments) throws MessagingException {
 
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+
+        mimeMessageHelper.setFrom(from);
 
         mimeMessageHelper.setTo(to);
 
         mimeMessageHelper.setSubject(subject);
 
         mimeMessageHelper.setText(body);
-
-        mimeMessageHelper.setFrom("CREDIT_MANAGEMENT");
 
         for (Pair<String , byte[]> attachment : attachments) {
             mimeMessageHelper.addAttachment(attachment.getFirst(), new ByteArrayResource(attachment.getSecond()));

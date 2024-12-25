@@ -57,7 +57,7 @@ public class CreditsExportation implements Scheduler {
 
     private void sendMail(Person person, byte[] attachment) {
         try {
-            simpleMailService.sendMail(person.getEmail(), "Credits", "Please find attached the credits that reached their payment date", Collections.singletonList(Pair.of("credits.xlsx", attachment)));
+            simpleMailService.sendMail("CREDIT_MANAGEMENT",person.getEmail(), "Credits", "Please find attached the credits that reached their payment date", Collections.singletonList(Pair.of("credits.xlsx", attachment)));
         } catch (Exception e) {
             log.error("An error occurred while sending mail to {}" , person.getEmail(), e);
         }
