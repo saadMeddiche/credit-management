@@ -22,6 +22,10 @@ public class PersonDataCreator {
 
     private final PersonRepository personRepository;
 
+    private static long mbUsed() {
+        return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/1024/1024;
+    }
+
     public void createPersonData(@NotEmpty(message = "Path must not be null nor empty.") String path) {
 
         try (Stream<String> lines = Files.lines(Paths.get(path))) {
@@ -45,7 +49,9 @@ public class PersonDataCreator {
 
             if (chunk.size() == chunkSize) {
                 log.debug("Processing chunk number {}", chunkCounter.incrementAndGet());
+                log.debug("Memory used before chunk[{}] : {} MB",chunkCounter.get(), mbUsed());
                 processPersonData(chunk);
+                log.debug("Memory used after chunk[{}] : {} MB",chunkCounter.get(), mbUsed());
                 log.debug("Chunk {} processed successfully", chunkCounter.get());
                 chunk.clear();
             }
@@ -54,7 +60,9 @@ public class PersonDataCreator {
 
         if (!chunk.isEmpty()) {
             log.debug("Processing the last chunk");
+            log.debug("Memory used before the last chunk : {} MB", mbUsed());
             processPersonData(chunk);
+            log.debug("Memory used after the last chunk : {} MB", mbUsed());
             log.debug("Last chunk processed successfully");
         }
 
