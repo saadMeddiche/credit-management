@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,31 +23,63 @@ public class PersonDataCreator {
     private final PersonRepository personRepository;
 
     public void createPersonData(@NotEmpty(message = "Path must not be null nor empty.") String path) {
+
         try (Stream<String> lines = Files.lines(Paths.get(path))) {
 
-            log.debug("[1*] Reading raw data from the file");
-            List<Person> rawPersons = extractPersons(lines);
-            log.debug("[1-] Data extracted successfully");
-
-            log.debug("[2*] Extracting raw emails from the data");
-            Map<String,Person> rawEmails = extractEmails(rawPersons);
-            log.debug("[2-] Emails extracted successfully");
-
-            log.debug("[3*] Fetching persons from the database using the raw emails");
-            List<Person> persons = pullPersons(rawEmails.keySet());
-            log.debug("[3-] Persons fetched successfully");
-
-            log.debug("[4*] Updating persons");
-            Map<String,Person> emailsOfNotExitedPersons =  updatePersons(persons, rawEmails);
-            log.debug("[4-] Persons updated successfully");
-
-            log.debug("[5*] Saving the persons that are not in the database");
-            personRepository.saveAll(emailsOfNotExitedPersons.values());
-            log.debug("[5-] Persons saved successfully");
+            processLinesInChunks(lines, 100_000);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private void processLinesInChunks(Stream<String> lines, int chunkSize) {
+
+        List<String> chunk = new ArrayList<>(chunkSize);
+
+        AtomicInteger chunkCounter = new AtomicInteger(0);
+
+        lines.forEach(line -> {
+
+            chunk.add(line);
+
+            if (chunk.size() == chunkSize) {
+                log.debug("Processing chunk number {}", chunkCounter.incrementAndGet());
+                processPersonData(chunk);
+                log.debug("Chunk {} processed successfully", chunkCounter.get());
+                chunk.clear();
+            }
+
+        });
+
+        if (!chunk.isEmpty()) {
+            log.debug("Processing the last chunk");
+            processPersonData(chunk);
+            log.debug("Last chunk processed successfully");
+        }
+
+    }
+
+    private void processPersonData(List<String> lines) {
+        log.debug("[1*] Reading raw data from the file");
+        List<Person> rawPersons = extractPersons(lines);
+        log.debug("[1-] Data extracted successfully");
+
+        log.debug("[2*] Extracting raw emails from the data");
+        Map<String,Person> rawEmails = extractEmails(rawPersons);
+        log.debug("[2-] Emails extracted successfully");
+
+        log.debug("[3*] Fetching persons from the database using the raw emails");
+        List<Person> persons = pullPersons(rawEmails.keySet());
+        log.debug("[3-] Persons fetched successfully");
+
+        log.debug("[4*] Updating persons");
+        Map<String,Person> emailsOfNotExitedPersons =  updatePersons(persons, rawEmails);
+        log.debug("[4-] Persons updated successfully");
+
+        log.debug("[5*] Saving the persons that are not in the database");
+        personRepository.saveAll(emailsOfNotExitedPersons.values());
+        log.debug("[5-] Persons saved successfully");
     }
 
     private List<Person> pullPersons(Set<String> emails) {
@@ -89,8 +122,8 @@ public class PersonDataCreator {
         return rawEmails;
     }
 
-    private List<Person> extractPersons(Stream<String> lines) {
-        return lines.map(this::extractPerson).collect(Collectors.toList());
+    private List<Person> extractPersons(List<String> lines) {
+        return lines.stream().map(this::extractPerson).collect(Collectors.toList());
     }
 
     private Person extractPerson(String line) {
