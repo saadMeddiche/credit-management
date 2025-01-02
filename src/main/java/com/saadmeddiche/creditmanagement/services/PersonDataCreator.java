@@ -2,6 +2,7 @@ package com.saadmeddiche.creditmanagement.services;
 
 import com.saadmeddiche.creditmanagement.entities.Person;
 import com.saadmeddiche.creditmanagement.repositories.PersonRepository;
+import jakarta.persistence.EntityManager;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +23,8 @@ public class PersonDataCreator {
 
     private final PersonRepository personRepository;
 
+    private final EntityManager entityManager;
+
     private static long mbUsed() {
         return (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())/1024/1024;
     }
@@ -30,7 +33,7 @@ public class PersonDataCreator {
 
         try (Stream<String> lines = Files.lines(Paths.get(path))) {
 
-            processLinesInChunks(lines, 100_000);
+            processLinesInChunks(lines, 50_000);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -54,6 +57,7 @@ public class PersonDataCreator {
                 log.debug("Memory used after chunk[{}] : {} MB",chunkCounter.get(), mbUsed());
                 log.debug("Chunk {} processed successfully", chunkCounter.get());
                 chunk.clear();
+                entityManager.clear();
             }
 
         });
@@ -62,6 +66,7 @@ public class PersonDataCreator {
             log.debug("Processing the last chunk");
             log.debug("Memory used before the last chunk : {} MB", mbUsed());
             processPersonData(chunk);
+            entityManager.clear();
             log.debug("Memory used after the last chunk : {} MB", mbUsed());
             log.debug("Last chunk processed successfully");
         }
