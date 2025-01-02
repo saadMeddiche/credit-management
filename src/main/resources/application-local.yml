@@ -20,19 +20,22 @@ spring.jpa:
       dialect: ${JPA_HIBERNATE_DIALECT:org.hibernate.dialect.PostgreSQLDialect}
 
 # Logger Configuration
-logging.level.org:
-  hibernate:
-    SQL: DEBUG
-    type.descriptor.sql.BasicBinder: TRACE
-    orm.jdbc.bind: TRACE
-  springframework:
-    data.*.*: trace
-    cache.*: trace
+logging.level:
+#  org:
+#    hibernate:
+#      SQL: DEBUG
+#      type.descriptor.sql.BasicBinder: TRACE
+#      orm.jdbc.bind: TRACE
+#    springframework:
+#      data.*.*: trace
+#      cache.*: trace
+  com.saadmeddiche.creditmanagement:
+    services.PersonDataCreator: DEBUG
 
 # Seeders Configuration
 person-seeder:
   enabled: ${PERSON_SEED_ENABLED:false}
-  person-count: ${PERSON_COUNT:50}
+  person-count: ${PERSON_COUNT:20000}
   phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
   credit-per-person: ${CREDIT_PER_PERSON:2}
 
