@@ -1,14 +1,31 @@
-# Use a base image with JDK
-FROM openjdk:17-jdk-slim as build
+# 806mg
+## Use a base image with JDK
+#FROM openjdk:17-jdk-slim as build
+#
+## Set working directory
+#WORKDIR /app
+#
+## Copy the JAR file from your target folder
+#COPY target/creditmanagement.jar /app/creditmanagement.jar
+#
+## Expose the port your application runs on
+#EXPOSE 8080
+#
+## Run the Spring Boot application
+#ENTRYPOINT ["java", "-jar", "/app/creditmanagement.jar"]
 
-# Set working directory
+# 422mg
+## Build stage
+FROM eclipse-temurin:17-jdk as build
+WORKDIR /build
+COPY target/creditmanagement.jar creditmanagement.jar
+
+# Runtime stage
+FROM eclipse-temurin:17-jre-alpine as runtime
 WORKDIR /app
+COPY --from=build /build/creditmanagement.jar creditmanagement.jar
+ENTRYPOINT ["java", "-jar", "creditmanagement.jar"]
 
-# Copy the JAR file from your target folder
-COPY target/creditmanagement.jar /app/creditmanagement.jar
 
-# Expose the port your application runs on
-EXPOSE 8080
 
-# Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "/app/creditmanagement.jar"]
+
