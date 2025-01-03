@@ -1,5 +1,5 @@
 # Build stage
-FROM eclipse-temurin:17-jdk as build
+FROM bellsoft/liberica-runtime-container:jdk-17-stream-musl as build
 WORKDIR /build
 
 # Copy Maven configuration files
@@ -18,7 +18,7 @@ COPY src /build/src
 RUN ./mvnw clean package -DskipTests
 
 # Runtime stage
-FROM eclipse-temurin:17-jre-alpine as runtime
+FROM bellsoft/liberica-runtime-container:jre-17-musl as runtime
 WORKDIR /app
 
 # Copy the built JAR file from the build stage
