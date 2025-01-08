@@ -1,21 +1,20 @@
 package com.saadmeddiche.creditmanagement.seeders;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 
-import java.util.logging.Logger;
-
+@Slf4j
 @Profile("local")
 public abstract class Seeder implements CommandLineRunner {
 
     private final String SEED_NAME = this.getClass().getSimpleName().toLowerCase();
-    private final Logger logger = Logger.getLogger(SEED_NAME);
 
     @Override
     final public void run(String... args) throws Exception {
-        logger.info(String.format("Seeding %s ...", SEED_NAME));
+        log.info("Seeding {} ...", SEED_NAME);
         seeding(); // The process of seeding is delegated to the concrete class
-        logger.info(String.format("Successfully seeded %s", SEED_NAME));
+        log.info("Successfully seeded {}", SEED_NAME);
     }
 
     protected abstract void seeding();
