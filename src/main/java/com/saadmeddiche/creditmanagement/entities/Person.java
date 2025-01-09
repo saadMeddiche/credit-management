@@ -46,4 +46,8 @@ public class Person implements Serializable {
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
     private Set<Credit> credits;
 
+    @JsonIgnoreProperties("person")
+    @OneToMany(mappedBy = "person")
+    private Set<PersonFile> files;
+
 }
