@@ -62,4 +62,5 @@ spring.mail:
 
 # Custom Static Resources Configuration
 custom-static-resource:
-  location: ${CUSTOM_STATIC_RESOURCE_LOCATION:/files}
+  location: ${CUSTOM_STATIC_RESOURCE_LOCATION:files}
+  url: ${CUSTOM_STATIC_RESOURCE_URL:files}

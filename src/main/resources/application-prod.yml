@@ -41,3 +41,4 @@ spring.mail:
 # Custom Static Resources Configuration
 custom-static-resource:
   location: ${CUSTOM_STATIC_RESOURCE_LOCATION}
+  url: ${CUSTOM_STATIC_RESOURCE_URL}
