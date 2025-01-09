@@ -21,21 +21,21 @@ spring.jpa:
 
 # Logger Configuration
 logging.level:
-#  org:
-#    hibernate:
-#      SQL: DEBUG
-#      type.descriptor.sql.BasicBinder: TRACE
-#      orm.jdbc.bind: TRACE
-#    springframework:
-#      data.*.*: trace
-#      cache.*: trace
+  org:
+    hibernate:
+      SQL: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
+      orm.jdbc.bind: TRACE
+    springframework:
+      data.*.*: trace
+      cache.*: trace
   com.saadmeddiche.creditmanagement:
     services.PersonDataCreator: DEBUG
 
 # Seeders Configuration
 person-seeder:
   enabled: ${PERSON_SEED_ENABLED:false}
-  person-count: ${PERSON_COUNT:20000}
+  person-count: ${PERSON_COUNT:50000}
   phone-number-per-person: ${PHONE_NUMBER_PER_PERSON:2}
   credit-per-person: ${CREDIT_PER_PERSON:2}
 
@@ -59,3 +59,7 @@ spring.mail:
     smtp.timeout: ${MAIL_SMTP_TIMEOUT:5000}
     smtp.writetimeout: ${MAIL_SMTP_WRITE_TIMEOUT:5000}
     smtp.starttls.enable: ${MAIL_SMTP_STARTTLS_ENABLE:true}
+
+# Custom Static Resources Configuration
+custom-static-resource:
+  location: ${CUSTOM_STATIC_RESOURCE_LOCATION:/files}
