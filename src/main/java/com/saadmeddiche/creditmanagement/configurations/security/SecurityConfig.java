@@ -1,4 +1,4 @@
-package com.saadmeddiche.creditmanagement.security;
+package com.saadmeddiche.creditmanagement.configurations.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
